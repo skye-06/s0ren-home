@@ -1,9 +1,20 @@
-# About
-This is the demo site for [Fuwari](https://github.com/saicaca/fuwari).
+# 关于我
 
-::github{repo="saicaca/fuwari"}
+我是 **S0ren**，武汉大学测绘学院 2024 级本科生。这个网站用于整理学习笔记、项目实践与阶段性成果。
 
-> ### Sources of images used in this site
-> - [Unsplash](https://unsplash.com/)
-> - [星と少女](https://www.pixiv.net/artworks/108916539) by [Stella](https://www.pixiv.net/users/93273965)
-> - [Rabbit - v1.4 Showcase](https://civitai.com/posts/586908) by [Rabbit_YourMajesty](https://civitai.com/user/Rabbit_YourMajesty)
+## 学习方向
+
+- GNSS 与卫星导航
+- GIS 空间分析
+- 遥感智能解译
+- 摄影测量
+- 视觉 SLAM
+- 激光雷达
+- 多传感器融合定位
+- 人工智能与深度学习
+
+## 站点说明
+
+- 顶部导航的“知识库”入口连接至独立的 Quartz 站点。
+- PDF 成果集中在本站的[文档页面](/documents/)。
+- 本站首版内容用于功能验证，示例项目与文档会逐步替换。

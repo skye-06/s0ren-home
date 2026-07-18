@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-labelledby="title">
+  <title id="title">中性测绘主题横幅占位图</title>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#dfe8ee"/>
+      <stop offset="1" stop-color="#9fb5c4"/>
+    </linearGradient>
+  </defs>
+  <rect width="1600" height="900" fill="url(#bg)"/>
+  <g fill="none" stroke="#486a80" stroke-width="4" opacity=".42">
+    <path d="M-80 700C210 520 310 830 610 650S1020 380 1680 610"/>
+    <path d="M-90 610C220 430 340 720 640 560S1070 290 1690 520"/>
+    <path d="M-100 520C240 340 360 620 690 470S1120 210 1700 430"/>
+    <circle cx="1210" cy="250" r="128"/>
+    <circle cx="1210" cy="250" r="78"/>
+    <path d="M1210 86v328M1046 250h328"/>
+  </g>
+</svg>

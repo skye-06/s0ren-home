@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title">
+  <title id="title">S0ren 头像占位图</title>
+  <rect width="512" height="512" rx="104" fill="#e8eef3"/>
+  <circle cx="256" cy="256" r="166" fill="none" stroke="#57758c" stroke-width="14"/>
+  <path d="M256 56v64M256 392v64M56 256h64M392 256h64" stroke="#57758c" stroke-width="14" stroke-linecap="round"/>
+  <circle cx="256" cy="256" r="18" fill="#57758c"/>
+  <text x="256" y="292" text-anchor="middle" font-family="Arial, sans-serif" font-size="118" font-weight="700" fill="#263d4e">S0</text>
+</svg>
