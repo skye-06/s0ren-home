@@ -8,7 +8,7 @@ import type {
 import { LinkPreset } from "./types/config";
 
 export const siteLinks = {
-	notes: "https://s0ren-notes.edgeone.app/",
+	notes: "https://s0ren-notes-dkquijal.edgeone.cool/",
 	github: "https://github.com/skye-06",
 } as const;
 
