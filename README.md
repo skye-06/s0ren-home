@@ -43,7 +43,9 @@ pnpm build
 - 构建命令：`pnpm build`
 - 输出目录：`dist`
 
-取得实际域名后，更新 `src/config.ts` 与 `astro.config.mjs` 并推送，Makers 会自动重新部署。
+当前项目域名为 `https://s0ren-home-xk8rcnfv.edgeone.cool/`，知识库链接与
+canonical 地址已经回填。当前加速区域包含中国大陆；按 Makers 的默认域名策略，
+控制台生成的预览链接有效期为 3 小时，长期公开访问需绑定自定义域名。
 
 ## 许可
 
