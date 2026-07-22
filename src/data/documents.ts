@@ -1,3 +1,5 @@
+import siteContent from "./site-content.json";
+
 export type DocumentCategory =
 	| "internship"
 	| "courses"
@@ -6,6 +8,7 @@ export type DocumentCategory =
 	| "resume";
 
 export interface DocumentItem {
+	id: string;
 	title: string;
 	category: DocumentCategory;
 	description: string;
@@ -21,12 +24,4 @@ export const documentCategoryLabels: Record<DocumentCategory, string> = {
 	resume: "个人简历",
 };
 
-export const documents: DocumentItem[] = [
-	{
-		title: "文档页面功能示例",
-		category: "courses",
-		description: "用于验证 PDF 在线查看和下载功能，请替换为真实成果。",
-		date: "2026-07-19",
-		file: "/documents/courses/example.pdf",
-	},
-];
+export const documents = siteContent.documents as DocumentItem[];

@@ -6,6 +6,7 @@ import type {
 	SiteConfig,
 } from "./types/config";
 import { LinkPreset } from "./types/config";
+import siteContent from "./data/site-content.json";
 
 export const siteLinks = {
 	notes: "https://notes.aisoren.top/",
@@ -78,7 +79,7 @@ export const navBarConfig: NavBarConfig = {
 export const profileConfig: ProfileConfig = {
 	avatar: "assets/images/s0ren-avatar.webp",
 	name: "S0ren",
-	bio: "武汉大学测绘学院 2024 级本科生",
+	bio: siteContent.profile.bio,
 	links: [
 		{
 			name: "GitHub",

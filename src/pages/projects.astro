@@ -1,6 +1,6 @@
 ---
 import MainGridLayout from "@layouts/MainGridLayout.astro";
-import { siteLinks } from "../config";
+import siteContent from "../data/site-content.json";
 ---
 
 <MainGridLayout title="项目" description="S0ren 的学习项目">
@@ -10,20 +10,30 @@ import { siteLinks } from "../config";
 			<p class="mt-2 text-75">记录测绘、导航与空间智能方向的学习实践。</p>
 		</header>
 
-		<article class="rounded-2xl border border-black/10 p-5 dark:border-white/10">
-			<p class="text-sm font-medium text-[var(--primary)]">示例，请替换</p>
-			<h2 class="mt-2 text-xl font-bold text-90">GNSS 单点定位学习项目</h2>
-			<p class="mt-2 text-75">
-				用于演示项目卡片的信息层级。后续可替换为真实项目简介、代码仓库和成果文档。
-			</p>
-			<div class="mt-5 flex flex-wrap gap-3">
-				<a class="btn-regular px-4 py-2 font-medium" href={siteLinks.github}>
-					GitHub
-				</a>
-				<a class="btn-plain px-4 py-2 font-medium" href="/documents/">
-					相关文档
-				</a>
-			</div>
-		</article>
+		<div class="grid gap-4">
+			{
+				siteContent.projects.map((project) => (
+					<article class="rounded-2xl border border-black/10 p-5 dark:border-white/10">
+						{project.badge && (
+							<p class="text-sm font-medium text-[var(--primary)]">{project.badge}</p>
+						)}
+						<h2 class="mt-2 text-xl font-bold text-90">{project.title}</h2>
+						<p class="mt-2 text-75">{project.description}</p>
+						<div class="mt-5 flex flex-wrap gap-3">
+							{project.primaryLabel && project.primaryUrl && (
+								<a class="btn-regular px-4 py-2 font-medium" href={project.primaryUrl}>
+									{project.primaryLabel}
+								</a>
+							)}
+							{project.secondaryLabel && project.secondaryUrl && (
+								<a class="btn-plain px-4 py-2 font-medium" href={project.secondaryUrl}>
+									{project.secondaryLabel}
+								</a>
+							)}
+						</div>
+					</article>
+				))
+			}
+		</div>
 	</section>
 </MainGridLayout>
