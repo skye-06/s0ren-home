@@ -22,7 +22,7 @@ export const siteConfig: SiteConfig = {
 	},
 	banner: {
 		enable: true,
-		src: "assets/images/s0ren-banner.svg",
+		src: "assets/images/s0ren-banner.webp",
 		position: "center", // Equivalent to object-position, only supports 'top', 'center', 'bottom'. 'center' by default
 		credit: {
 			enable: false, // Display the credit text of the banner image
@@ -74,7 +74,7 @@ export const navBarConfig: NavBarConfig = {
 };
 
 export const profileConfig: ProfileConfig = {
-	avatar: "assets/images/s0ren-avatar.svg",
+	avatar: "assets/images/s0ren-avatar.webp",
 	name: "S0ren",
 	bio: "武汉大学测绘学院 2024 级本科生",
 	links: [
