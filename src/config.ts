@@ -10,6 +10,8 @@ import { LinkPreset } from "./types/config";
 export const siteLinks = {
 	notes: "https://notes.aisoren.top/",
 	github: "https://github.com/skye-06",
+	wechat: "/assets/images/wechat-qr.jpg",
+	email: "mailto:389244295@qq.com",
 } as const;
 
 export const siteConfig: SiteConfig = {
@@ -82,6 +84,16 @@ export const profileConfig: ProfileConfig = {
 			name: "GitHub",
 			icon: "fa6-brands:github",
 			url: siteLinks.github,
+		},
+		{
+			name: "微信",
+			icon: "fa6-brands:weixin",
+			url: siteLinks.wechat,
+		},
+		{
+			name: "邮箱",
+			icon: "fa6-regular:envelope",
+			url: siteLinks.email,
 		},
 	],
 };
