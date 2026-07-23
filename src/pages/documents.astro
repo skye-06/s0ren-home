@@ -14,20 +14,20 @@ const sortedDocuments = [...documents].sort((a, b) =>
 	<section class="card-base px-6 py-7 md:px-9">
 		<header class="mb-6">
 			<h1 class="text-3xl font-bold text-90">文档</h1>
-			<p class="mt-2 text-75">PDF 成果集中展示，当前条目均为本地静态文件。</p>
+			<p class="font-reading mt-2 text-75">PDF 成果集中展示，当前条目均为本地静态文件。</p>
 		</header>
 
 		<div class="grid gap-4">
 			{
 				sortedDocuments.map((document) => (
 					<article class="rounded-2xl border border-black/10 p-5 dark:border-white/10">
-						<div class="flex flex-wrap items-center gap-2 text-sm text-60">
+						<div class="font-reading flex flex-wrap items-center gap-2 text-sm text-60">
 							<span>{documentCategoryLabels[document.category]}</span>
 							<span aria-hidden="true">·</span>
 							<time datetime={document.date}>{document.date}</time>
 						</div>
 						<h2 class="mt-2 text-xl font-bold text-90">{document.title}</h2>
-						<p class="mt-2 text-75">{document.description}</p>
+						<p class="font-reading mt-2 text-75">{document.description}</p>
 						<div class="mt-5 flex flex-wrap gap-3">
 							<a
 								class="btn-regular px-4 py-2 font-medium"

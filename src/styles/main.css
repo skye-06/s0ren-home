@@ -1,5 +1,28 @@
 @tailwind components;
 
+:root {
+    --font-ui: "Roboto", "Noto Sans SC", "Microsoft YaHei UI", "PingFang SC", system-ui, sans-serif;
+    --font-reading: "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", "STSong", "SimSun", serif;
+    --font-kai: "Kaiti SC", "STKaiti", "KaiTi", "DFKai-SB", var(--font-reading);
+}
+
+body {
+    font-family: var(--font-ui);
+}
+
+.font-reading,
+.custom-md {
+    font-family: var(--font-reading);
+}
+
+.font-kai {
+    font-family: var(--font-kai);
+}
+
+.custom-md :is(h1, h2, h3, h4, h5, h6) {
+    font-family: var(--font-ui);
+}
+
 @layer components {
     .card-base {
         @apply rounded-[var(--radius-large)] overflow-hidden bg-[var(--card-bg)] transition;
