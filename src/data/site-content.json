@@ -5,10 +5,10 @@
 	"projects": [
 		{
 			"id": "gnss-single-point",
-			"badge": "示例，请替换",
-			"title": "GNSS 单点定位学习项目",
-			"description": "用于演示项目卡片的信息层级。后续可替换为真实项目简介、代码仓库和成果文档。",
-			"primaryLabel": "GitHub",
+			"badge": "课程",
+			"title": "人工智能与机器学习A",
+			"description": "",
+			"primaryLabel": "知识库",
 			"primaryUrl": "https://github.com/skye-06",
 			"secondaryLabel": "相关文档",
 			"secondaryUrl": "/documents/"
@@ -22,6 +22,54 @@
 			"description": "用于验证 PDF 在线查看和下载功能，请替换为真实成果。",
 			"date": "2026-07-19",
 			"file": "/documents/courses/example.pdf"
+		},
+		{
+			"id": "52f1d734-bb4c-4931-81f0-c44d7c9501c9",
+			"title": "人工智能与机器学习A真题",
+			"category": "courses",
+			"description": "2021-2022测绘学院人工智能与机器学习A期末考试真题",
+			"date": "2026-07-24",
+			"file": "/documents/courses/武汉大学测绘学院2021-2022机器学习.pdf"
+		},
+		{
+			"id": "e8dd2613-1838-41bf-baac-42b9a81fa4a8",
+			"title": "地理信息系统原理真题2020-2021",
+			"category": "courses",
+			"description": "内容来自2020-2023年武汉大学测绘学院地理信息系统原理真题——整理者S0ren",
+			"date": "2026-07-24",
+			"file": "/documents/courses/2020-2021.pdf"
+		},
+		{
+			"id": "9e0ca89e-0965-4f3c-bfa7-c6fafe649e0b",
+			"title": "地理信息系统原理真题2021-2022",
+			"category": "courses",
+			"description": "内容来自2020-2023年武汉大学测绘学院地理信息系统原理真题——整理者S0ren",
+			"date": "2026-07-24",
+			"file": "/documents/courses/2021-2022.pdf"
+		},
+		{
+			"id": "57abd1df-044f-496d-925b-db98e60c12b7",
+			"title": "地理信息系统原理真题2022-2023",
+			"category": "courses",
+			"description": "内容来自2020-2023年武汉大学测绘学院地理信息系统原理真题——整理者S0ren",
+			"date": "2026-07-24",
+			"file": "/documents/courses/2022-2023.pdf"
+		},
+		{
+			"id": "6cdf6ae7-211a-4e03-87ba-377950713c38",
+			"title": "地理信息系统原理真题Dijkstra例题",
+			"category": "courses",
+			"description": "内容来自2020-2023年武汉大学测绘学院地理信息系统原理真题——整理者S0ren",
+			"date": "2026-07-24",
+			"file": "/documents/courses/Dijkstra例题.pdf"
+		},
+		{
+			"id": "e00a2dd1-92ae-42e3-bb9c-d0fda4695d0b",
+			"title": "地理信息系统原理往年应用题含答案",
+			"category": "courses",
+			"description": "内容来自2020-2023年武汉大学测绘学院地理信息系统原理真题——整理者S0ren",
+			"date": "2026-07-24",
+			"file": "/documents/courses/GIS往年应用题含答案.pdf"
 		}
 	]
 }
