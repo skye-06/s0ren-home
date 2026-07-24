@@ -1,11 +1,6 @@
 import siteContent from "./site-content.json";
 
-export type DocumentCategory =
-	| "internship"
-	| "courses"
-	| "projects"
-	| "competitions"
-	| "resume";
+export type DocumentCategory = string;
 
 export interface DocumentItem {
 	id: string;
@@ -16,7 +11,7 @@ export interface DocumentItem {
 	file: `/documents/${string}.pdf`;
 }
 
-export const documentCategoryLabels: Record<DocumentCategory, string> = {
+export const documentCategoryLabels: Record<string, string> = {
 	internship: "专业实习",
 	courses: "课程成果",
 	projects: "项目文档",

@@ -22,7 +22,7 @@ const sortedDocuments = [...documents].sort((a, b) =>
 				sortedDocuments.map((document) => (
 					<article class="rounded-2xl border border-black/10 p-5 dark:border-white/10">
 						<div class="font-reading flex flex-wrap items-center gap-2 text-sm text-60">
-							<span>{documentCategoryLabels[document.category]}</span>
+							<span>{documentCategoryLabels[document.category] || document.category}</span>
 							<span aria-hidden="true">·</span>
 							<time datetime={document.date}>{document.date}</time>
 						</div>
