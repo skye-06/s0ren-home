@@ -2,6 +2,14 @@
 	"profile": {
 		"bio": "武汉大学测绘学院 2024 级"
 	},
+	"music": [
+		{
+			"id": "4c0b4875-d989-46d7-8e8e-d6ec70696e3e",
+			"title": "夜的钢琴曲",
+			"artist": "石进",
+			"file": "/music/1c3a27bc-cf1e-4aff-a9e8-abbe8ceb2c05.flac"
+		}
+	],
 	"projects": [
 		{
 			"id": "gnss-single-point",
