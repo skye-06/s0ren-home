@@ -22,6 +22,8 @@
 	let analyser: AnalyserNode | undefined;
 	let animationFrame = 0;
 	let reducedMotion = false;
+	const visualBarCount = 20;
+	const visualLevels = new Float32Array(visualBarCount);
 
 	$: currentTrack = tracks[currentIndex] ?? null;
 
@@ -115,31 +117,44 @@
 			canvas.height = height;
 		}
 		const data = new Uint8Array(analyser.frequencyBinCount);
+		const primary =
+			getComputedStyle(document.documentElement).getPropertyValue("--primary").trim() ||
+			"#7c72e8";
 		const draw = () => {
 			if (!playing) return;
 			analyser?.getByteFrequencyData(data);
 			context.clearRect(0, 0, width, height);
-			const gap = 3 * scale;
-			const barWidth = Math.max(2 * scale, (width - gap * (data.length - 1)) / data.length);
-			for (let index = 0; index < data.length; index += 1) {
-				const barHeight = Math.max(2 * scale, (data[index] / 255) * height * 0.9);
-				context.fillStyle = `oklch(0.72 0.14 var(--hue) / ${0.1 + data[index] / 900})`;
+			const gap = 4 * scale;
+			const barWidth = Math.max(
+				2 * scale,
+				(width - gap * (visualBarCount - 1)) / visualBarCount,
+			);
+			context.fillStyle = primary;
+			for (let index = 0; index < visualBarCount; index += 1) {
+				const distance = Math.abs(index - (visualBarCount - 1) / 2) / (visualBarCount / 2);
+				const source = Math.min(data.length - 1, Math.floor(distance ** 1.6 * data.length));
+				const target = 0.12 + Math.sqrt(data[source] / 255) * 0.72;
+				visualLevels[index] += (target - visualLevels[index]) * 0.16;
+				const barHeight = Math.max(3 * scale, visualLevels[index] * height);
+				context.globalAlpha = 0.1 + visualLevels[index] * 0.2;
 				context.beginPath();
 				context.roundRect(
 					index * (barWidth + gap),
-					height - barHeight,
+					(height - barHeight) / 2,
 					barWidth,
 					barHeight,
 					barWidth / 2,
 				);
 				context.fill();
 			}
+			context.globalAlpha = 1;
 			animationFrame = requestAnimationFrame(draw);
 		};
 		draw();
 	}
 
 	onMount(() => {
+		if (!audio) return;
 		reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 		try {
 			const saved = JSON.parse(localStorage.getItem("s0ren-music-player") || "{}");
@@ -158,6 +173,7 @@
 	});
 </script>
 
+{#if tracks.length}
 <aside class:expanded class:playing class="music-player" aria-label="背景音乐播放器">
 	<canvas bind:this={canvas} class="visualizer" aria-hidden="true"></canvas>
 	<div class="player-row">
@@ -169,9 +185,9 @@
 			on:click={() => (expanded = !expanded)}
 		>
 			<span class="wave-mark" aria-hidden="true">
-				<i></i><i></i><i></i><i></i>
+				<i></i><i></i><i></i><i></i><i></i>
 			</span>
-			<span class="track-copy">
+			<span class="track-copy" aria-live="polite">
 				<strong>{currentTrack?.title || "音乐库暂无歌曲"}</strong>
 				<small>{currentTrack?.artist || "可在内容编辑器中上传"}</small>
 			</span>
@@ -200,6 +216,10 @@
 	</div>
 
 	<div id="music-player-panel" class="player-panel" hidden={!expanded}>
+		<div class="panel-heading">
+			<span>播放队列</span>
+			<span>{currentIndex + 1} / {tracks.length}</span>
+		</div>
 		<div class="progress-row">
 			<span>{formatTime(currentTime)}</span>
 			<input
@@ -248,51 +268,64 @@
 		on:ended={() => changeTrack(1, true)}
 	></audio>
 </aside>
+{/if}
 
 <style>
 	.music-player {
 		position: fixed;
 		z-index: 45;
 		top: 5.5rem;
-		left: 1rem;
-		width: min(20rem, calc(100vw - 2rem));
+		left: max(1rem, calc((100vw - var(--page-width)) / 2 + 1rem));
+		width: min(22rem, calc(100vw - 2rem));
 		overflow: hidden;
 		border: 1px solid var(--line-divider);
 		border-radius: var(--radius-large);
-		background: color-mix(in oklch, var(--card-bg) 78%, transparent);
-		box-shadow: 0 14px 40px rgb(28 25 55 / 12%);
-		backdrop-filter: blur(18px) saturate(145%);
+		background: color-mix(in oklch, var(--float-panel-bg) 86%, transparent);
+		box-shadow:
+			0 18px 50px rgb(28 25 55 / 12%),
+			inset 0 1px rgb(255 255 255 / 24%);
+		backdrop-filter: blur(22px) saturate(135%);
 		transition:
 			width 220ms ease,
+			transform 220ms ease,
 			background-color 220ms ease,
 			box-shadow 220ms ease;
 	}
 
 	.music-player:not(.expanded) {
-		width: min(18rem, calc(100vw - 2rem));
+		width: min(21rem, calc(100vw - 2rem));
+	}
+
+	.music-player:hover {
+		transform: translateY(-2px);
+		box-shadow:
+			0 22px 58px rgb(28 25 55 / 16%),
+			inset 0 1px rgb(255 255 255 / 28%);
 	}
 
 	.visualizer {
 		position: absolute;
-		inset: auto 0 0;
+		inset: 0;
 		width: 100%;
-		height: 56%;
+		height: 100%;
 		opacity: 0;
+		mask-image: linear-gradient(to right, transparent 2%, black 22%, black 78%, transparent 98%);
 		pointer-events: none;
-		transition: opacity 240ms ease;
+		transition: opacity 320ms ease;
 	}
 
 	.playing .visualizer {
-		opacity: 1;
+		opacity: 0.72;
 	}
 
 	.player-row {
 		position: relative;
-		display: flex;
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) auto;
 		align-items: center;
-		gap: 0.25rem;
-		min-height: 4rem;
-		padding: 0.45rem;
+		gap: 0.45rem;
+		min-height: 4.35rem;
+		padding: 0.5rem;
 	}
 
 	button {
@@ -308,56 +341,63 @@
 	}
 
 	.track-summary {
-		display: flex;
-		flex: 1;
+		display: grid;
+		grid-template-columns: 2.5rem minmax(0, 1fr);
 		align-items: center;
 		gap: 0.65rem;
 		min-width: 0;
-		padding: 0.45rem;
-		border-radius: 0.75rem;
-		background: transparent;
+		padding: 0.4rem;
+		border-radius: 0.8rem;
+		background: color-mix(in oklch, var(--card-bg) 24%, transparent);
 		text-align: left;
 		cursor: pointer;
+		transition:
+			background-color 180ms ease,
+			transform 180ms ease;
 	}
 
 	.track-summary:hover {
 		background: var(--btn-plain-bg-hover);
+		transform: translateX(2px);
 	}
 
 	.wave-mark {
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		gap: 2px;
-		flex: 0 0 2.25rem;
-		width: 2.25rem;
-		height: 2.25rem;
-		border-radius: 0.7rem;
-		background: var(--btn-regular-bg);
+		gap: 2.5px;
+		width: 2.5rem;
+		height: 2.5rem;
+		border-radius: 0.8rem;
+		background: color-mix(in oklch, var(--btn-regular-bg) 84%, transparent);
 		color: var(--primary);
+		box-shadow: inset 0 0 0 1px color-mix(in oklch, var(--primary) 12%, transparent);
 	}
 
 	.wave-mark i {
-		width: 3px;
-		height: 0.55rem;
+		width: 2.5px;
+		height: 1rem;
 		border-radius: 999px;
 		background: currentColor;
-		animation: wave 900ms ease-in-out infinite alternate;
+		transform: scaleY(0.32);
+		transform-origin: center;
+		animation: wave 900ms cubic-bezier(0.45, 0, 0.55, 1) infinite;
 	}
 
 	.wave-mark i:nth-child(2) {
-		height: 1.05rem;
-		animation-delay: -420ms;
-	}
-
-	.wave-mark i:nth-child(3) {
-		height: 0.8rem;
 		animation-delay: -180ms;
 	}
 
+	.wave-mark i:nth-child(3) {
+		animation-delay: -360ms;
+	}
+
 	.wave-mark i:nth-child(4) {
-		height: 0.45rem;
-		animation-delay: -620ms;
+		animation-delay: -540ms;
+	}
+
+	.wave-mark i:nth-child(5) {
+		animation-delay: -720ms;
 	}
 
 	.music-player:not(.playing) .wave-mark i {
@@ -379,8 +419,9 @@
 
 	.track-copy strong {
 		color: rgb(0 0 0 / 78%);
-		font-size: 0.84rem;
+		font-size: 0.82rem;
 		font-weight: 700;
+		letter-spacing: 0.01em;
 	}
 
 	:global(.dark) .track-copy strong {
@@ -401,6 +442,7 @@
 		display: flex;
 		flex: 0 0 auto;
 		align-items: center;
+		gap: 0.1rem;
 	}
 
 	.quick-controls button {
@@ -426,6 +468,8 @@
 	.quick-controls .play-button {
 		background: var(--btn-regular-bg);
 		color: var(--primary);
+		border-radius: 999px;
+		transform: scale(1.08);
 	}
 
 	svg {
@@ -436,8 +480,23 @@
 
 	.player-panel {
 		position: relative;
-		padding: 0 0.8rem 0.8rem;
+		padding: 0 0.9rem 0.9rem;
 		border-top: 1px solid var(--line-divider);
+		background: color-mix(in oklch, var(--card-bg) 24%, transparent);
+	}
+
+	.panel-heading {
+		display: flex;
+		justify-content: space-between;
+		padding-top: 0.75rem;
+		color: rgb(0 0 0 / 42%);
+		font-size: 0.66rem;
+		font-weight: 700;
+		letter-spacing: 0.08em;
+	}
+
+	:global(.dark) .panel-heading {
+		color: rgb(255 255 255 / 46%);
 	}
 
 	.progress-row,
@@ -505,6 +564,10 @@
 		color: var(--primary);
 	}
 
+	.playlist button.active {
+		box-shadow: inset 2px 0 var(--primary);
+	}
+
 	.playlist span,
 	.playlist small {
 		overflow: hidden;
@@ -518,17 +581,32 @@
 	}
 
 	@keyframes wave {
-		to {
-			transform: scaleY(0.45);
+		0%,
+		100% {
+			transform: scaleY(0.32);
+			opacity: 0.52;
+		}
+		50% {
+			transform: scaleY(1);
+			opacity: 1;
 		}
 	}
 
 	@media (max-width: 640px) {
 		.music-player,
 		.music-player:not(.expanded) {
-			top: 4.85rem;
+			top: 4.75rem;
+			bottom: auto;
 			left: 0.75rem;
 			width: calc(100vw - 1.5rem);
+		}
+
+		.music-player:hover {
+			transform: none;
+		}
+
+		.playlist {
+			max-height: min(12rem, 32vh);
 		}
 	}
 
