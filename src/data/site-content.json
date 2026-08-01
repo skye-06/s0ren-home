@@ -33,7 +33,7 @@
 		},
 		{
 			"id": "52f1d734-bb4c-4931-81f0-c44d7c9501c9",
-			"title": "人工智能与机器学习A真题",
+			"title": "人工智能与机器学习A真题2021-2022",
 			"category": "courses",
 			"description": "2021-2022测绘学院人工智能与机器学习A期末考试真题",
 			"date": "2026-07-24",
@@ -78,6 +78,78 @@
 			"description": "内容来自2020-2023年武汉大学测绘学院地理信息系统原理真题——整理者S0ren",
 			"date": "2026-07-24",
 			"file": "/documents/courses/GIS往年应用题含答案.pdf"
+		},
+		{
+			"id": "248a7738-c37e-4291-aa68-67b05b35a76e",
+			"title": "卫星导航原理试卷1",
+			"category": "courses",
+			"description": "卫星导航原理测绘学院真题",
+			"date": "2026-08-02",
+			"file": "/documents/courses/试卷.pdf"
+		},
+		{
+			"id": "8df071cc-1424-4e8a-9bce-0d3e8386d10a",
+			"title": "卫星导航原理试卷2",
+			"category": "courses",
+			"description": "卫星导航原理测绘学院真题",
+			"date": "2026-08-02",
+			"file": "/documents/courses/试卷2.pdf"
+		},
+		{
+			"id": "417be3b1-e5a4-43d6-8d4b-c03a285d2b08",
+			"title": "卫星导航原理试卷3",
+			"category": "courses",
+			"description": "卫星导航原理测绘学院真题",
+			"date": "2026-08-02",
+			"file": "/documents/courses/试卷3.pdf"
+		},
+		{
+			"id": "70929ec5-96f5-456c-a10b-172b2069e97f",
+			"title": "卫星导航原理2019-2020",
+			"category": "courses",
+			"description": "卫星导航原理测绘学院真题",
+			"date": "2026-08-02",
+			"file": "/documents/courses/卫星导航原理2019-2020.pdf"
+		},
+		{
+			"id": "64b0f1b3-2981-4e66-a38f-15ffcbe1070c",
+			"title": "卫星导航原理2020-2021",
+			"category": "courses",
+			"description": "卫星导航原理测绘学院真题",
+			"date": "2026-08-02",
+			"file": "/documents/courses/卫星导航原理2020-2021.pdf"
+		},
+		{
+			"id": "8ec9872a-0ce8-43da-8230-7d1a270c51c9",
+			"title": "卫星导航原理2022-2023",
+			"category": "courses",
+			"description": "卫星导航原理测绘学院真题",
+			"date": "2026-08-02",
+			"file": "/documents/courses/卫星导航原理2022-2023.pdf"
+		},
+		{
+			"id": "b68719f1-f81f-4f17-a3f4-c4fe8b072c30",
+			"title": "卫星导航原理2025-2026",
+			"category": "courses",
+			"description": "卫星导航原理测绘学院真题",
+			"date": "2026-08-02",
+			"file": "/documents/courses/卫星导航原理2025-2026.pdf"
+		},
+		{
+			"id": "e5ffd172-e381-49fd-9967-110b6621a38c",
+			"title": "卫星导航原理2025-2026年第二学期",
+			"category": "courses",
+			"description": "卫星导航原理测绘学院真题",
+			"date": "2026-08-02",
+			"file": "/documents/courses/卫星导航原理2025-2026年第二学期.pdf"
+		},
+		{
+			"id": "79d448d6-e13b-430f-a08a-eb1e86d6c009",
+			"title": "卫星导航原理及应用样题",
+			"category": "courses",
+			"description": "卫星导航原理测绘学院真题",
+			"date": "2026-08-02",
+			"file": "/documents/courses/卫星导航原理及应用样题.pdf"
 		}
 	]
 }
