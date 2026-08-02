@@ -1,26 +1,90 @@
 ---
 import MainGridLayout from "@layouts/MainGridLayout.astro";
-import {
-	documentCategoryLabels,
-	documents,
-} from "../data/documents";
+import { Icon } from "astro-icon/components";
+import { documentCategoryLabels, documents } from "../data/documents";
 
 const sortedDocuments = [...documents].sort((a, b) =>
 	b.date.localeCompare(a.date),
 );
+const documentCategories = Array.from(
+	new Set(sortedDocuments.map((document) => document.category)),
+).map((category) => ({
+	value: category,
+	label: documentCategoryLabels[category] || category,
+	count: sortedDocuments.filter((document) => document.category === category)
+		.length,
+}));
+
+const DOCUMENTS_PER_PAGE = 6;
 ---
 
 <MainGridLayout title="文档" description="S0ren 的 PDF 成果与资料">
-	<section class="card-base px-6 py-7 md:px-9">
+	<section
+		id="document-library"
+		class="card-base px-6 py-7 md:px-9"
+		data-document-library
+		data-page-size={DOCUMENTS_PER_PAGE}
+	>
 		<header class="mb-6">
 			<h1 class="text-3xl font-bold text-90">文档</h1>
 			<p class="font-reading mt-2 text-75">PDF 成果集中展示，当前条目均为本地静态文件。</p>
 		</header>
 
-		<div class="grid gap-4">
+		<div class="document-toolbar" data-pagefind-ignore>
+			<div
+				class="document-filter"
+				role="group"
+				aria-labelledby="document-filter-label"
+				data-category-filter
+			>
+				<span id="document-filter-label" class="document-filter-label">分类</span>
+				<div class="document-filter-options">
+					<button
+						type="button"
+						class="document-filter-button is-active"
+						data-category-button
+						data-category=""
+						data-category-label="全部"
+						aria-pressed="true"
+					>
+						<span>全部</span>
+						<span class="document-filter-count">{sortedDocuments.length}</span>
+					</button>
+					{
+						documentCategories.map((category) => (
+							<button
+								type="button"
+								class="document-filter-button"
+								data-category-button
+								data-category={category.value}
+								data-category-label={category.label}
+								aria-pressed="false"
+							>
+								<span>{category.label}</span>
+								<span class="document-filter-count">{category.count}</span>
+							</button>
+						))
+					}
+				</div>
+			</div>
+			<p
+				class="document-result-summary"
+				data-result-summary
+				aria-live="polite"
+				aria-atomic="true"
+			>
+				共 {sortedDocuments.length} 份文档
+			</p>
+		</div>
+
+		<div class="grid gap-4" data-document-list>
 			{
 				sortedDocuments.map((document) => (
-					<article class="rounded-2xl border border-black/10 p-5 dark:border-white/10">
+					<article
+						class="document-card rounded-2xl border border-black/10 p-5 dark:border-white/10"
+						data-document-item
+						data-category={document.category}
+					>
 						<div class="font-reading flex flex-wrap items-center gap-2 text-sm text-60">
 							<span>{documentCategoryLabels[document.category] || document.category}</span>
 							<span aria-hidden="true">·</span>
@@ -49,5 +113,490 @@ const sortedDocuments = [...documents].sort((a, b) =>
 				))
 			}
 		</div>
+
+		<nav
+			class="document-pagination"
+			data-pagination
+			aria-label="文档分页"
+			data-pagefind-ignore
+			hidden
+		>
+			<button
+				type="button"
+				class="document-pagination-step"
+				data-page-action="previous"
+				aria-label="上一页"
+			>
+				<Icon name="material-symbols:chevron-left-rounded" aria-hidden="true" />
+				<span>上一页</span>
+			</button>
+			<div class="document-page-numbers" data-page-numbers></div>
+			<button
+				type="button"
+				class="document-pagination-step"
+				data-page-action="next"
+				aria-label="下一页"
+			>
+				<span>下一页</span>
+				<Icon name="material-symbols:chevron-right-rounded" aria-hidden="true" />
+			</button>
+		</nav>
 	</section>
+
+<style is:global>
+	#document-library {
+		scroll-margin-top: 5.5rem;
+	}
+
+	#document-library .document-toolbar {
+		display: flex;
+		align-items: flex-end;
+		justify-content: space-between;
+		gap: 1rem;
+		padding-bottom: 1.25rem;
+	}
+
+	#document-library .document-filter {
+		display: grid;
+		gap: 0.625rem;
+	}
+
+	#document-library .document-filter-label {
+		font-size: 0.875rem;
+		font-weight: 500;
+		color: rgb(0 0 0 / 0.5);
+	}
+
+	.dark #document-library .document-filter-label {
+		color: rgb(255 255 255 / 0.5);
+	}
+
+	#document-library .document-filter-options {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+	}
+
+	#document-library .document-filter-button {
+		display: inline-flex;
+		min-height: 2.75rem;
+		align-items: center;
+		gap: 0.5rem;
+		border-radius: 0.75rem;
+		padding: 0.625rem 0.875rem;
+		font-weight: 500;
+		color: rgb(0 0 0 / 0.75);
+		transition:
+			background-color 160ms ease,
+			color 160ms ease,
+			transform 120ms ease;
+	}
+
+	.dark #document-library .document-filter-button {
+		color: rgb(255 255 255 / 0.75);
+	}
+
+	#document-library .document-filter-button:hover {
+		background: var(--btn-plain-bg-hover);
+		color: var(--primary);
+	}
+
+	#document-library .document-filter-button:active {
+		transform: scale(0.97);
+	}
+
+	#document-library .document-filter-button.is-active {
+		background: var(--primary);
+		color: white;
+	}
+
+	.dark #document-library .document-filter-button.is-active {
+		color: rgb(0 0 0 / 0.72);
+	}
+
+	#document-library .document-filter-count {
+		display: inline-grid;
+		min-width: 1.5rem;
+		height: 1.5rem;
+		place-items: center;
+		border-radius: 0.5rem;
+		padding-inline: 0.375rem;
+		background: rgb(0 0 0 / 0.06);
+		font-size: 0.75rem;
+		font-variant-numeric: tabular-nums;
+	}
+
+	.dark #document-library .document-filter-count {
+		background: rgb(255 255 255 / 0.08);
+	}
+
+	#document-library .document-filter-button.is-active .document-filter-count {
+		background: rgb(255 255 255 / 0.2);
+	}
+
+	.dark #document-library .document-filter-button.is-active .document-filter-count {
+		background: rgb(0 0 0 / 0.1);
+	}
+
+	#document-library .document-result-summary {
+		flex: 0 0 auto;
+		margin: 0 0 0.6875rem;
+		font-size: 0.875rem;
+		color: rgb(0 0 0 / 0.5);
+		font-variant-numeric: tabular-nums;
+	}
+
+	.dark #document-library .document-result-summary {
+		color: rgb(255 255 255 / 0.5);
+	}
+
+	#document-library .document-card[hidden],
+	#document-library .document-pagination[hidden] {
+		display: none;
+	}
+
+	#document-library .document-pagination {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 0.625rem;
+		margin-top: 1.5rem;
+	}
+
+	#document-library .document-page-numbers {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 0.375rem;
+	}
+
+	#document-library .document-pagination-step,
+	#document-library .document-page-number {
+		display: inline-flex;
+		min-width: 2.75rem;
+		height: 2.75rem;
+		align-items: center;
+		justify-content: center;
+		border-radius: 0.75rem;
+		background: var(--btn-plain-bg-hover);
+		color: rgb(0 0 0 / 0.75);
+		font-weight: 500;
+		font-variant-numeric: tabular-nums;
+		transition:
+			background-color 160ms ease,
+			color 160ms ease,
+			transform 120ms ease,
+			opacity 160ms ease;
+	}
+
+	.dark #document-library .document-pagination-step,
+	.dark #document-library .document-page-number {
+		color: rgb(255 255 255 / 0.75);
+	}
+
+	#document-library .document-pagination-step {
+		gap: 0.25rem;
+		padding-inline: 0.75rem;
+	}
+
+	#document-library .document-pagination-step svg {
+		width: 1.25rem;
+		height: 1.25rem;
+	}
+
+	#document-library :is(.document-pagination-step, .document-page-number):not(:disabled):hover {
+		background: var(--btn-plain-bg-active);
+		color: var(--primary);
+	}
+
+	#document-library :is(.document-pagination-step, .document-page-number):not(:disabled):active {
+		transform: scale(0.94);
+	}
+
+	#document-library .document-page-number[aria-current="page"] {
+		background: var(--primary);
+		color: white;
+	}
+
+	.dark #document-library .document-page-number[aria-current="page"] {
+		color: rgb(0 0 0 / 0.72);
+	}
+
+	#document-library :is(.document-pagination-step, .document-page-number):disabled {
+		cursor: not-allowed;
+		opacity: 0.32;
+	}
+
+	#document-library .document-page-ellipsis {
+		min-width: 1.5rem;
+		text-align: center;
+		color: rgb(0 0 0 / 0.4);
+	}
+
+	.dark #document-library .document-page-ellipsis {
+		color: rgb(255 255 255 / 0.4);
+	}
+
+	#document-library :is(button, a):focus-visible {
+		outline: 3px solid var(--primary);
+		outline-offset: 3px;
+	}
+
+	@media (max-width: 40rem) {
+		#document-library .document-toolbar {
+			align-items: stretch;
+			flex-direction: column;
+		}
+
+		#document-library .document-result-summary {
+			margin: 0;
+		}
+
+		#document-library .document-pagination {
+			flex-wrap: wrap;
+		}
+
+		#document-library .document-pagination-step span {
+			display: none;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		#document-library .document-filter-button,
+		#document-library .document-pagination-step,
+		#document-library .document-page-number {
+			transition: none;
+		}
+	}
+</style>
+
+<script>
+	type DocumentsWindow = Window & {
+		__documentsAbortController?: AbortController;
+	};
+
+	type PageToken = number | "ellipsis";
+
+	function initDocumentLibrary() {
+		const root = document.querySelector<HTMLElement>("[data-document-library]");
+		if (!root) return;
+		const library = root;
+
+		const documentsWindow = window as DocumentsWindow;
+		documentsWindow.__documentsAbortController?.abort();
+		const controller = new AbortController();
+		documentsWindow.__documentsAbortController = controller;
+
+		const items = Array.from(
+			root.querySelectorAll<HTMLElement>("[data-document-item]"),
+		);
+		const categoryButtons = Array.from(
+			root.querySelectorAll<HTMLButtonElement>("[data-category-button]"),
+		);
+		const summary = root.querySelector<HTMLElement>("[data-result-summary]");
+		const pagination = root.querySelector<HTMLElement>("[data-pagination]");
+		const pageNumbers = root.querySelector<HTMLElement>("[data-page-numbers]");
+		const previousButton = root.querySelector<HTMLButtonElement>(
+			'[data-page-action="previous"]',
+		);
+		const nextButton = root.querySelector<HTMLButtonElement>(
+			'[data-page-action="next"]',
+		);
+		const pageSize = Number(root.dataset.pageSize) || 6;
+
+		if (
+			!summary ||
+			!pagination ||
+			!pageNumbers ||
+			!previousButton ||
+			!nextButton
+		) {
+			return;
+		}
+		const resultSummary = summary;
+		const paginationElement = pagination;
+		const pageNumbersElement = pageNumbers;
+		const previousPageButton = previousButton;
+		const nextPageButton = nextButton;
+
+		const categoryValues = new Set(
+			categoryButtons
+				.map((button) => button.dataset.category || "")
+				.filter(Boolean),
+		);
+
+		function readUrlState() {
+			const params = new URLSearchParams(window.location.search);
+			const requestedCategory = params.get("category") || "";
+			const requestedPage = Number.parseInt(params.get("page") || "1", 10);
+
+			return {
+				category: categoryValues.has(requestedCategory)
+					? requestedCategory
+					: "",
+				page:
+					Number.isFinite(requestedPage) && requestedPage > 0
+						? requestedPage
+						: 1,
+			};
+		}
+
+		let state = readUrlState();
+
+		function pageTokens(currentPage: number, lastPage: number): PageToken[] {
+			if (lastPage <= 7) {
+				return Array.from({ length: lastPage }, (_, index) => index + 1);
+			}
+
+			let start = Math.max(2, currentPage - 1);
+			let end = Math.min(lastPage - 1, currentPage + 1);
+			if (currentPage <= 3) end = 4;
+			if (currentPage >= lastPage - 2) start = lastPage - 3;
+
+			const tokens: PageToken[] = [1];
+			if (start > 2) tokens.push("ellipsis");
+			for (let page = start; page <= end; page += 1) tokens.push(page);
+			if (end < lastPage - 1) tokens.push("ellipsis");
+			tokens.push(lastPage);
+			return tokens;
+		}
+
+		function renderPageNumbers(lastPage: number) {
+			const fragment = document.createDocumentFragment();
+			for (const token of pageTokens(state.page, lastPage)) {
+				if (token === "ellipsis") {
+					const ellipsis = document.createElement("span");
+					ellipsis.className = "document-page-ellipsis";
+					ellipsis.textContent = "…";
+					ellipsis.setAttribute("aria-hidden", "true");
+					fragment.append(ellipsis);
+					continue;
+				}
+
+				const button = document.createElement("button");
+				button.type = "button";
+				button.className = "document-page-number";
+				button.dataset.pageNumber = String(token);
+				button.textContent = String(token);
+				button.setAttribute("aria-label", `第 ${token} 页`);
+				if (token === state.page) button.setAttribute("aria-current", "page");
+				fragment.append(button);
+			}
+			pageNumbersElement.replaceChildren(fragment);
+		}
+
+		function updateUrl() {
+			const nextUrl = new URL(window.location.href);
+			if (state.category) nextUrl.searchParams.set("category", state.category);
+			else nextUrl.searchParams.delete("category");
+
+			if (state.page > 1) nextUrl.searchParams.set("page", String(state.page));
+			else nextUrl.searchParams.delete("page");
+
+			if (nextUrl.href !== window.location.href) {
+				window.history.pushState({}, "", nextUrl);
+			}
+		}
+
+		function scrollToLibrary() {
+			library.scrollIntoView({
+				behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
+					? "auto"
+					: "smooth",
+				block: "start",
+			});
+		}
+
+		function render({ updateHistory = false, scroll = false } = {}) {
+			const matchingItems = items.filter(
+				(item) => !state.category || item.dataset.category === state.category,
+			);
+			const lastPage = Math.max(1, Math.ceil(matchingItems.length / pageSize));
+			state.page = Math.min(Math.max(state.page, 1), lastPage);
+			const firstVisibleIndex = (state.page - 1) * pageSize;
+			const visibleItems = new Set(
+				matchingItems.slice(firstVisibleIndex, firstVisibleIndex + pageSize),
+			);
+
+			for (const item of items) item.hidden = !visibleItems.has(item);
+
+			for (const button of categoryButtons) {
+				const isActive = (button.dataset.category || "") === state.category;
+				button.classList.toggle("is-active", isActive);
+				button.setAttribute("aria-pressed", String(isActive));
+			}
+
+			const activeCategory = categoryButtons.find(
+				(button) => (button.dataset.category || "") === state.category,
+			);
+			const categoryLabel = activeCategory?.dataset.categoryLabel || "全部";
+			resultSummary.textContent = `${categoryLabel} · ${matchingItems.length} 份文档 · 第 ${state.page}/${lastPage} 页`;
+
+			paginationElement.hidden = lastPage <= 1;
+			previousPageButton.disabled = state.page === 1;
+			nextPageButton.disabled = state.page === lastPage;
+			renderPageNumbers(lastPage);
+
+			if (updateHistory) updateUrl();
+			if (scroll) scrollToLibrary();
+		}
+
+		for (const button of categoryButtons) {
+			button.addEventListener(
+				"click",
+				() => {
+					state.category = button.dataset.category || "";
+					state.page = 1;
+					render({ updateHistory: true });
+				},
+				{ signal: controller.signal },
+			);
+		}
+
+		previousPageButton.addEventListener(
+			"click",
+			() => {
+				if (state.page <= 1) return;
+				state.page -= 1;
+				render({ updateHistory: true, scroll: true });
+			},
+			{ signal: controller.signal },
+		);
+
+		nextPageButton.addEventListener(
+			"click",
+			() => {
+				state.page += 1;
+				render({ updateHistory: true, scroll: true });
+			},
+			{ signal: controller.signal },
+		);
+
+		pageNumbersElement.addEventListener(
+			"click",
+			(event) => {
+				const target = event.target;
+				if (!(target instanceof Element)) return;
+				const button = target.closest<HTMLButtonElement>("[data-page-number]");
+				if (!button) return;
+				state.page = Number(button.dataset.pageNumber) || 1;
+				render({ updateHistory: true, scroll: true });
+			},
+			{ signal: controller.signal },
+		);
+
+		window.addEventListener(
+			"popstate",
+			() => {
+				state = readUrlState();
+				render();
+			},
+			{ signal: controller.signal },
+		);
+
+		render();
+	}
+
+	initDocumentLibrary();
+</script>
 </MainGridLayout>
